@@ -1,0 +1,68 @@
+package fundamentals;
+
+public class LinkedListStack<Item> 
+{
+	/* nested class for user defined node */
+	private class Node
+	{
+		/* every node in a linked list contains an item, and a refernce
+		to the next node in the list */
+		Item item;
+		Node next;
+	}
+	
+	/* instance variables*/
+	Node pointerToFirstNode;
+	int N;
+	
+	/* instance methods */
+	
+	
+	public boolean isEmpty()
+	{ return (N==0);}
+	
+	
+	public int size()
+	{ return (N);}
+	
+	/* implementing the push function for a stack based linked list
+	 * simply requires adding the new element to the front of the linked list
+	 */
+	public void push (Item item)
+	{
+		Node temp = pointerToFirstNode;
+		pointerToFirstNode.item = item;
+		pointerToFirstNode.next = temp;
+		N++;
+	}
+	
+	/* implementing the pop function requires dereferncing the node
+	 * pointed to by pointerToFirstNode */
+	public Item pop ()
+	{
+		Item poppedItem = pointerToFirstNode.item;
+		pointerToFirstNode = pointerToFirstNode.next; //shift the reference to the next node
+		N--; 
+		return (poppedItem);
+	}
+	
+	
+	/* method to print the Stack */
+	public void printStack ()
+	{
+		System.out.println ("Printing the stack : ");
+		for (Node i = this.pointerToFirstNode ; i!= null ; i=i.next)
+			System.out.println ((String) i.item); 
+		System.out.println ();
+			
+	}
+	/* testing code to be put here */
+	public static void main (String[] args)
+	{
+		/* create testing object */
+		LinkedListStack testObject = new LinkedListStack ();
+		
+		
+	}
+	
+}
