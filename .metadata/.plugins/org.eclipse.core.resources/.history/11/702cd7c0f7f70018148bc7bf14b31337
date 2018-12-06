@@ -1,0 +1,35 @@
+package sorting;
+/* Not to be run, this file only serves as a template for all 
+ * the other sorting classes that we will be writing */
+
+
+public class SortTemplate 
+{
+	/* main sort function */
+	public static void sortFunction (Comparable[] arr)
+	{
+		
+	}
+	
+	/* function to check if one of the two items being compared
+	 * is less than the other */
+	private static boolean isLessThan (Comparable v, Comparable w)
+	{
+				
+	}
+	
+	/* function to exchange items based on keys */
+	private static void exchange (Comparable[] arr, int k1, int k2)
+	{
+		Comparable temp = arr[k1];
+		arr[k1] = arr[k2];
+		arr[k2] = temp;
+	}
+	
+	/* function to print sorted array */
+	private static void printArray (Comparable[] arr)
+	{
+				
+	}
+	
+}

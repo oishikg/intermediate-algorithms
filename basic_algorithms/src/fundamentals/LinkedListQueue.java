@@ -54,7 +54,7 @@ public class LinkedListQueue<Item>
 	
 	/* method to print the Queue*/
 	public void printQueue()
-	{
+	{ 
 		System.out.println ("Printing the queue: ");
 		for (Node i = this.pointerToHead; i!= null; i=i.next)
 			System.out.println (i.item); 
