@@ -17,7 +17,8 @@ public class MergeIterative
 		int i = lo; // i keeps track of the left side of the array
 		int j = mid + 1;  // j keeps track of the right side of the array
 		
-		/* copy the array into the auxiliary one */
+		/* copy the array into the auxiliary one; note that
+		 * there are 2N array accesses, N for arr, and N for aux */
 		for (int k = lo ; k <= hi ; k++)
 			aux[k] = arr[k];
 		
