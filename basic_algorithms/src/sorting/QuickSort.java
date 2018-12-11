@@ -1,8 +1,5 @@
 package sorting;
 import java.util.*;
-/* Not to be run, this file only serves as a template for all 
- * the other sorting classes that we will be writing */
-
 
 public class QuickSort
 {

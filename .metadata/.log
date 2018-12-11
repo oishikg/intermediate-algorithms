@@ -546,3 +546,38 @@ java.lang.NullPointerException
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:595)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1501)
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1474)
+!SESSION 2018-12-10 15:48:21.402 -----------------------------------------------
+eclipse.buildId=4.9.0.I20180906-0745
+java.version=1.8.0_191
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_IN
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.recommenders.types.rcp 1 4 2018-12-12 02:24:52.313
+!MESSAGE Full project indexing required:
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/cldrdata.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/dnsns.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/icedtea-sound.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/jaccess.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/localedata.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/nashorn.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunec.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunjce_provider.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunpkcs11.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/zipfs.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar
+  [*] /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar
+
+!STACK 0
+org.eclipse.recommenders.utils.Logs$LogTraceException
+	at org.eclipse.recommenders.utils.Logs$LogTraceException.newTrace(Logs.java:381)
+	at org.eclipse.recommenders.utils.Logs.log(Logs.java:134)
+	at org.eclipse.recommenders.internal.types.rcp.ProjectTypesIndex.needsRebuild(ProjectTypesIndex.java:169)
+	at org.eclipse.recommenders.internal.types.rcp.ProjectTypesIndex.startUp(ProjectTypesIndex.java:122)
+	at com.google.common.util.concurrent.AbstractIdleService$2$1.run(AbstractIdleService.java:54)
+	at com.google.common.util.concurrent.Callables$3.run(Callables.java:93)
+	at java.lang.Thread.run(Thread.java:748)

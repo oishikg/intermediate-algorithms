@@ -1,0 +1,79 @@
+package sorting;
+
+
+public class PriorityQueue 
+{
+	/* instance variables: note that we only implement a pq for integers, 
+	 * and a variable N to keep track of the size of the pq */
+	int[] pq; 
+	int N = 0;
+	int defaultPqSize = 5;
+	
+	/* constructor to instantiate the priority queue with a default  
+	 * initial size; in addition to the initial size, we implement 
+	 * the pq with array resizing */
+	public PriorityQueue ()
+	{
+		pq = new int [defaultPqSize];
+	}
+	
+	/* instance methods */
+	
+	/* private helper method to resize the pq */
+	private void resize(int max)
+	{
+		int [] temp = new int[max];
+		for (int i=0; i<N ; i++)
+			temp[i] = pq [i];
+		pq = temp;
+	}
+	
+	/* helper function to exchange items based on keys */
+	private static void exchange (int k1, int k2)
+	{
+		int temp = pq [k1];
+		pq [k1] = pq [k2];
+		pq [k2] = temp;
+	}
+	
+	/* method to return current size of pq */
+	public int size ()
+	{
+		return N;
+	}
+	
+	/* swim() function */
+	private void swim ()
+	{
+		
+	}
+	
+	
+	
+	
+	/* insert operation: recall that to insert a value in the pq, we place it at the
+	 * end of the pq, and then swim up to reheapify */
+	public void insert (int key)
+	{
+		/* check if resizing is required */
+		if (N == a.length)
+			resize (2*a.length);
+				
+		/* next, increment the pq size by 1, and then insert key at the end;
+		 * note that we increment N first to follow the convention of leaving
+		 * pq[0] empty*/ 
+		pq [++N] = key;
+		
+		/* finally, reheapify by invoking swim */
+		swim ();
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+}
