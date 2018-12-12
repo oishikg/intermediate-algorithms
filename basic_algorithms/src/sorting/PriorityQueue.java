@@ -67,7 +67,13 @@ public class PriorityQueue
 		{
 			/* first find the larger of the two children */
 			int largerChildIndex = 0;
-			if (pq [2*k] > pq [2*k + 1])
+			/* note that 2*k + 1 can equal at most N, and not more, because 2*k can equal 
+			 * at most N-1 by the condition stipulated in the while loop; in this case 
+			 * arr[k] has only one child at a[2*k]
+			 */
+			if (2*k + 1 == N)
+				largerChildIndex = 2*k;
+			else if (pq [2*k] > pq [2*k + 1])
 				largerChildIndex = 2*k;
 			else
 				largerChildIndex = 2*k + 1;

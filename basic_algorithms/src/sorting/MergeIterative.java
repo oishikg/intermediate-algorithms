@@ -73,7 +73,7 @@ public class MergeIterative
 	}
 			
 		
-	/* function to currenertify whether the resultant array is 
+	/* function to certify whether the resultant array is 
 	 * at all sorted
 	 */
 	public static boolean isSorted (int[] arr)
