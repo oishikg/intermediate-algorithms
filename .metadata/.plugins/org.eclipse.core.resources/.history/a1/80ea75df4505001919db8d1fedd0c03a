@@ -1,0 +1,273 @@
+package searching;
+
+/* implementation of a symbol table using two parallel 
+ * arrays to store keys and values; put() inputs the values
+ * into the symbol table in order, enabling get() to be 
+ * implemented in logarithmic time using binary search (see
+ * the rank function)
+ */
+public class BinarySearchSymbolTable 
+{
+	
+	
+	/* instance variables; note that we use the private
+	 * access specifier to prevent a client programs
+	 * from modifying these arrays; also note that the
+	 * the values are stored as Integers in an Option container
+	 * to enable implementation of null
+	 * */
+	private int[] keys;
+	private String [] values;
+	private int N;
+	
+	/* constructor to instantiate the array */
+	BinarySearchSymbolTable ()
+	{
+		keys = new int [5];
+		values = new String [5];
+		
+	}
+	/* the following instance variable keeps track of the number
+	 * of deleted keys; this allows us to implement lazy deletion
+	 */
+	private int numDeletedKeys; 
+	
+	/* resize() function; resized both the keys and the values  */
+	private void resize (int max)
+	{
+		int [] tempKeys = new int[max];
+		String [] tempValues = new String [max];
+		for (int i = 0 ; i < N ; i++)
+		{
+			tempKeys[i] = keys [i];
+			tempValues[i] = values [i];
+		}
+		keys = tempKeys;
+		values = tempValues;
+	}
+	
+	
+	/* binary search (iterative) implementation */
+	public int rank (int key)
+	{
+		int lo = 0;
+		int hi = N - 1;
+		while (lo <= hi)
+		{
+			int mid = lo + (hi - lo)/2;
+			/* if keys[mid] > keys[key], then the key
+			 * is in the lower half of the array 
+			 */
+			if (keys[mid] > key)
+				hi = mid - 1;
+			/* if keys[mid[ < keys[key], then the key is
+			 * in the upper half of the array
+			 */
+			else if (keys [mid] < key)
+				lo = mid + 1;
+			/* if neither is the case, keys[key] = keys[mid],
+			 * and our binary search is complete 
+			 */
+			else
+				return mid;
+		}
+		/* if the control breaks out of the while loop, our
+		 * search is incomplete; standard implementations of binary search
+		 * would return a null value to indicate the unsuccessful search; we will however be returning 
+		 * the lo value, because the rank function is also used by the put() method to 
+		 * determine where a new key-pair value should be placed; 
+		 */
+		return lo;
+	}
+	
+	/* function to return the size of the symbol table 
+	 * at time of invokation
+	 */
+	public int size ()
+	{ return N;}
+	
+	/* function to check if the ST is empty */
+	public boolean isEmpty ()
+	{return (N == 0);}
+	
+		
+	/* function to get() a value if it exists in the table, and return 
+	 * null otherwise */
+	public String get (int key)
+	{
+		/* first check if the ST is empty; if so, create and
+		 * return a none 
+		 */
+		if (isEmpty())
+			return (null);
+		
+		/* otherwise retrieve the rank of the key; since our implementation of
+		 * rank returns a rank even when the key is not present, we should
+		 * need to further check if the key in the returned rank 
+		 * is actually the key we searched for; if so, we return the value associated with the
+		 * key, and if not, we return a none object; note that for pairs deleted
+		 * but not yet removed, this code will still return null  */
+		int r = rank (key);
+		if (r < N && keys[r] == key)
+			return (values[r]);
+		else
+			return (null);
+	}
+	
+	/* function to put a key-value pair in the symbol table */
+	public void put (int key, String value)
+	{
+		/* next, we determine whether the key is already present; if so,
+		 * we update the value, and if not, we then traverse
+		 * through the arrays to do so */
+		int r = rank (key);
+		if (keys[r] == key)
+			values[r] = value;
+		else 
+		{
+			/* shift the elements one place to the right */
+			for (int i = N ; i > r ; i--)
+			{
+				values[i] = values [i-1];
+				keys[i] = keys[i-1];
+			}
+			/* insert the pair in the ranked position */
+			values[r] = value;
+			keys[r] = key;
+			/* update the size of the ST */
+			N++;
+		}
+		
+		/* finally check whether our arrays require resizing */
+		if (N == keys.length)
+			resize (N*2);
+		if (N < keys.length/4)
+			resize (N/2);
+		
+				
+	}
+	
+	/* function to delete all null key-pair values and restructure 
+	 * the arrays (by reducing their size) in O(N) time
+	 */
+	private void lazyRestructure ()
+	{
+		/* initialize temp arrays; note that the additional +1 is
+		 * in cases where N is odd
+		 */
+		int[] tempKeys = new int [N/2 + 1];
+		String[] tempValues = new String[N/2 + 1];
+		int j = 0; //variable indexing the temp arrays
+		
+		/* loop through keys and values, ignore every null value,
+		 * and place every non-null value into the temp arrays; note that
+		 * the temp array indexing variable is only incremented when 
+		 * values[i] is not null, so we can safely assume that neither tempKeys 
+		 * not tempValues will be accessed out-of-bounds
+		 */
+		for (int i = 0 ; i < N ; i++)
+		{
+			if (values[i] == null)
+				continue;
+			else
+			{
+				tempKeys[j] = keys[i];
+				tempValues[j] = values[i];
+				j++;
+			}
+				
+		}
+		
+		/* finally, reassign the keys and values arrays */
+		keys = tempKeys;
+		values = tempValues;
+		/* and reassign the instance variables N and numDeletedKeys*/
+		N = N - numDeletedKeys;
+		numDeletedKeys = 0;
+	}
+		
+	
+	
+	/* function to delete a key-value pair; we use a lazy-deletion 
+	 * strategy  which is as follows: 
+	 * - put (key, null)
+	 * - do an amortized analysis to determine the cost of this operation 
+	 * - finally, make the required edits to the put() and get() functions
+	 * to handle this case  */
+	public void delete (int key)
+	{
+		/* lazy deletion: we simply associate the key with 
+		 * a null value and then increment the variable tracking the 
+		 * deleted keys; note that N cannot be decremented at this stage
+		 * since the deleted key is not necessarily at the end of
+		 * the array */
+		put (key, null);
+		numDeletedKeys++;
+		/* we remove all the null key-pair values when numDeletedKeys = 1/2 N;
+		 * invoke the helper function lazyRestructure() to do so; */
+		if (numDeletedKeys == N/2)
+			lazyRestructure ();
+		return;
+	}
+	
+	/* standard print functions for debugging and testing */
+	private void printST ()
+	{
+		for (int i = 0 ; i < N; i++)
+			System.out.print("(" + keys[i] + " , " + values[i] + ")" + "   ");
+		System.out.println ();
+	}
+	
+	private void printArrays ()
+	{
+		for (int i = 0 ; i < keys.length ; i++)
+			System.out.print("(" + keys[i] + " , " + values[i] + ")" + "   ");
+		System.out.println ();
+	}
+	
+	/* main function to write unit tests */
+	public static void main (String[] args)
+	{
+		/* test arrays */
+		int[] testKeys = {1, 35, 16, 16, 18, 19, 2, 45, 18, 19, 23, 24, 89, 78, 69, 91};
+		String[] testValues = {"Miles", "Chet", "Dave", "Oscar", "Bill", "Art", "Martha", "Valentina", "Katya", "Daniel", "Evgeny", "Arthur", "Ivo", "Anne", "Hillary", "Jacqueline"};
+		
+		/* create object to test methods */
+		BinarySearchSymbolTable testOb = new BinarySearchSymbolTable ();
+		
+		/* tests for put() */
+		testOb.put (testKeys [0], testValues[0]);
+		testOb.put (testKeys [1], testValues[1]);
+		testOb.put (testKeys [2], testValues[2]);
+		testOb.printST();
+		testOb.printArrays();
+		testOb.put (testKeys [3], testValues[3]);
+		testOb.put (testKeys [4], testValues[4]);
+		testOb.put (testKeys [5], testValues[5]);
+		testOb.printST();
+		testOb.printArrays();
+		testOb.put (testKeys [6], testValues[6]);
+		testOb.put (testKeys [7], testValues[7]);
+		testOb.put (testKeys [8], testValues[8]);
+		testOb.printST();
+		testOb.printArrays();
+		
+		/*tests for get() */
+		assert (testOb.get(16) == "Oscar");
+		assert (testOb.get(35) == "Chet");
+		assert (testOb.get(2) == "Martha");
+		assert (testOb.get(19) == "Art");
+		assert (testOb.get(39) == null);
+		
+		/*tests for delete ()*/
+		
+		/* since the array length is initialized to 0,
+		 * this is a potential bug in all code that uses
+		 * array resizing; fix this 
+		 */
+		
+		
+		
+	}
+	
+}

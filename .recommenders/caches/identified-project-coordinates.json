@@ -1,1 +1,1 @@
-[[{"location":"/usr/lib/jvm/java-8-openjdk-amd64","type":"JRE","hints":{"EXECUTION_ENVIRONMENT":"OSGi/Minimum-1.2"}},"jre:jre:1.8.0"]]
+[[{"location":"/usr/lib/jvm/java-8-openjdk-amd64","type":"JRE","hints":{"EXECUTION_ENVIRONMENT":"OSGi/Minimum-1.2"}},"jre:jre:1.8.0"],[{"location":"/home/oishik/YNC/LoA_Sem1/Algorithms/basic_algorithms","type":"PROJECT","hints":{"PROJECT_NAME":"basic_algorithms"}},"ABSENT"]]
