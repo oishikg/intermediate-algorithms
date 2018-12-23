@@ -171,22 +171,6 @@ public class BinarySearchTree
 		this.root = deleteMaxHelper (this.root);
 	}
 	
-	/* helper function to copy a sub-tree into a different memory
-	 * location
-	 */
-	public Node copySubTree (Node r)
-	{
-		/* base case */
-		if (r == null)
-			return null;
-		else
-		{
-			Node copy = new Node (r.key, r.value,
-					copySubTree (r.left), copySubTree (r.right)) ;
-			return copy;
-		}
-		
-	}
 	
 	/* function to delete any node */
 	private Node deleteHelper (Node r, int k)
@@ -209,22 +193,82 @@ public class BinarySearchTree
 		/* when the key is found */
 		else
 		{
-			/* use two temp variables, one which points to the same
-			 * memory address as r, and one which COPIES in a 
-			 * separate memory location r; the reason for doing this
-			 * is to avoid a cyclical pointer error, which takes place
-			 * when r.left is set to temp.left (see write-up) 
+			/* make a temp copy of the node r; we will modify 
+			 * r using temp's reference to the original 
+			 * structure of r; note that our original approach
+			 * of initializing a successor node and then 
+			 * building up while referring to r fails because
+			 * when we set successor.left = r.left, the original 
+			 * sub-tree rooted at r also gets modified, since 
+			 * both successor and temp refer to the same copy
+			 * of the sub-tree! Owing to this reason, we end up
+			 * with a cyclical structure which gave rise to the
+			 * infinite loop when we attempted to print the tree */
+			System.out.println("Debugging now");
+			Node temp = r;
+			System.out.println("Printing temp");
+			printBT (temp);
+			System.out.println();
+			printBT (temp.left);
+			System.out.println();
+			printBT (temp.right);
+			System.out.println();
+			System.out.println();
+			System.out.println("Printing r");
+			printBT (r);
+			System.out.println();
+			printBT (r.left);
+			System.out.println();
+			printBT (r.right);
+			System.out.println();
+			System.out.println();
+			/* set r to point to its successor */
+			r = minHelper (temp.right);
+			System.out.println("Printing temp");
+			printBT (temp);
+			System.out.println();
+			printBT (temp.left);
+			System.out.println();
+			printBT (temp.right);
+			System.out.println();
+			System.out.println();
+			System.out.println("Printing r");
+			printBT (r);
+			System.out.println();
+			printBT (r.left);
+			System.out.println();
+			printBT (r.right);
+			System.out.println();
+			System.out.println();
+			/* set the left sub-tree to temp's left sub-tree */
+			r.left = temp.left;
+			System.out.println("Printing temp");
+			printBT (temp);
+			System.out.println();
+			printBT (temp.left);
+			System.out.println();
+			printBT (temp.right);
+			System.out.println();
+			System.out.println();
+			System.out.println("Printing r");
+			printBT (r);
+			System.out.println();
+			printBT (r.left);
+			System.out.println();
+			printBT (r.right);
+			System.out.println();
+			System.out.println();
+			
+			/* delete the minimal node in temp's right sub-tree,
+			 * which r references now; set r's right sub-tree to
+			 * this modified sub-tree
 			 */
-			Node tempCopy = copySubTree (r);
-			Node tempRef = r;
-			/* set r to the successor */
-			r = minHelper (tempRef.right);
-			/* construct the left subtree */
-			r.left = tempRef.left;
-			/* construct the right subtree with the copy*/
-			r.right = deleteMinHelper (tempCopy.right);
+			r.right = deleteMinHelper(temp.right);
+			
 			return r;
 		}
+
+		
 	}
 	
 	public void delete (int k)
@@ -239,7 +283,12 @@ public class BinarySearchTree
 		else
 			this.root = deleteHelper (this.root, k);
 	}
-		
+	
+	
+	
+	
+	
+	
 	/* function to print key-value pairs in the tree in ascending order */
 	public static void printBT (Node r)
 	{
@@ -331,15 +380,6 @@ public class BinarySearchTree
 		assert (ob1.size() == 5);
 		assert (ob2.size() == 3);
 		
-		/* test copySubTree */
-		/*Node test = ob.copySubTree (ob.root);
-		printBT (test);
-		System.out.println();
-		
-		test = ob.copySubTree (ob1.root);
-		printBT (test);
-		System.out.println();*/
-		
 		/* test deleteMin () */
 		/*
 		ob.deleteMin();
@@ -368,24 +408,27 @@ public class BinarySearchTree
 		System.out.println(); */
 		
 		/* test delete () */
-		ob.delete(1);
+		/*ob.delete(1);
 		printBT (ob.root);
 		System.out.println();
 		
 		ob.delete(22);
 		printBT (ob.root);
-		System.out.println(); 
+		System.out.println(); */
 		
 		ob.delete(18);
-		printBT (ob.root);
+		//printBT (ob.root);
 		System.out.println(); 
 		
-		ob1.delete(8);
-		printBT (ob1.root);
-		System.out.println();
+		//ob1.delete(8);
+		//printBT (ob1.root);
+		//System.out.println();
+		//printBT (ob1.root);
 		
-		ob1.delete(11);
-		printBT (ob1.root);
-		System.out.println();
+		
+		
 	}
+	
+	
+	
 }

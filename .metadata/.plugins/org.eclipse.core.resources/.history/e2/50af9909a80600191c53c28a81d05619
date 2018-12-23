@@ -174,18 +174,10 @@ public class BinarySearchTree
 	/* helper function to copy a sub-tree into a different memory
 	 * location
 	 */
-	public Node copySubTree (Node r)
+	private Node copySubTree (Node r)
 	{
-		/* base case */
-		if (r == null)
-			return null;
-		else
-		{
-			Node copy = new Node (r.key, r.value,
+		Node copy = new Node (r.key, r.value,
 					copySubTree (r.left), copySubTree (r.right)) ;
-			return copy;
-		}
-		
 	}
 	
 	/* function to delete any node */
@@ -209,22 +201,12 @@ public class BinarySearchTree
 		/* when the key is found */
 		else
 		{
-			/* use two temp variables, one which points to the same
-			 * memory address as r, and one which COPIES in a 
-			 * separate memory location r; the reason for doing this
-			 * is to avoid a cyclical pointer error, which takes place
-			 * when r.left is set to temp.left (see write-up) 
-			 */
-			Node tempCopy = copySubTree (r);
-			Node tempRef = r;
-			/* set r to the successor */
-			r = minHelper (tempRef.right);
-			/* construct the left subtree */
-			r.left = tempRef.left;
-			/* construct the right subtree with the copy*/
-			r.right = deleteMinHelper (tempCopy.right);
-			return r;
+			/* make a copy of the sub-tree rooted at r */
+			Node temp = copySubTree (r);
+			
 		}
+
+		
 	}
 	
 	public void delete (int k)
@@ -239,7 +221,12 @@ public class BinarySearchTree
 		else
 			this.root = deleteHelper (this.root, k);
 	}
-		
+	
+	
+	
+	
+	
+	
 	/* function to print key-value pairs in the tree in ascending order */
 	public static void printBT (Node r)
 	{
@@ -331,15 +318,6 @@ public class BinarySearchTree
 		assert (ob1.size() == 5);
 		assert (ob2.size() == 3);
 		
-		/* test copySubTree */
-		/*Node test = ob.copySubTree (ob.root);
-		printBT (test);
-		System.out.println();
-		
-		test = ob.copySubTree (ob1.root);
-		printBT (test);
-		System.out.println();*/
-		
 		/* test deleteMin () */
 		/*
 		ob.deleteMin();
@@ -368,24 +346,27 @@ public class BinarySearchTree
 		System.out.println(); */
 		
 		/* test delete () */
-		ob.delete(1);
+		/*ob.delete(1);
 		printBT (ob.root);
 		System.out.println();
 		
 		ob.delete(22);
 		printBT (ob.root);
-		System.out.println(); 
+		System.out.println(); */
 		
 		ob.delete(18);
-		printBT (ob.root);
+		//printBT (ob.root);
 		System.out.println(); 
 		
-		ob1.delete(8);
-		printBT (ob1.root);
-		System.out.println();
+		//ob1.delete(8);
+		//printBT (ob1.root);
+		//System.out.println();
+		//printBT (ob1.root);
 		
-		ob1.delete(11);
-		printBT (ob1.root);
-		System.out.println();
+		
+		
 	}
+	
+	
+	
 }

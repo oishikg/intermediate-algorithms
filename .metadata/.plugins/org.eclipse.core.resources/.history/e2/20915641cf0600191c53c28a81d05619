@@ -225,6 +225,8 @@ public class BinarySearchTree
 			r.right = deleteMinHelper (tempCopy.right);
 			return r;
 		}
+
+		
 	}
 	
 	public void delete (int k)
@@ -239,7 +241,12 @@ public class BinarySearchTree
 		else
 			this.root = deleteHelper (this.root, k);
 	}
-		
+	
+	
+	
+	
+	
+	
 	/* function to print key-value pairs in the tree in ascending order */
 	public static void printBT (Node r)
 	{

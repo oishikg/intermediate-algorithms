@@ -225,6 +225,8 @@ public class BinarySearchTree
 			r.right = deleteMinHelper (tempCopy.right);
 			return r;
 		}
+
+		
 	}
 	
 	public void delete (int k)

@@ -209,22 +209,29 @@ public class BinarySearchTree
 		/* when the key is found */
 		else
 		{
-			/* use two temp variables, one which points to the same
-			 * memory address as r, and one which COPIES in a 
-			 * separate memory location r; the reason for doing this
-			 * is to avoid a cyclical pointer error, which takes place
-			 * when r.left is set to temp.left (see write-up) 
-			 */
+			/* make a copy of the sub-tree rooted at r */
+			//System.out.println("Debugging now");
 			Node tempCopy = copySubTree (r);
 			Node tempRef = r;
-			/* set r to the successor */
+			//printBT (tempCopy);
+			//System.out.println();
+			
 			r = minHelper (tempRef.right);
-			/* construct the left subtree */
+			//printBT (r);
+			//System.out.println();
+			
 			r.left = tempRef.left;
-			/* construct the right subtree with the copy*/
+			//printBT (r);
+			//System.out.println();
+			
 			r.right = deleteMinHelper (tempCopy.right);
+			//printBT (r);
+			//System.out.println();
+			
 			return r;
 		}
+
+		
 	}
 	
 	public void delete (int k)
@@ -239,7 +246,12 @@ public class BinarySearchTree
 		else
 			this.root = deleteHelper (this.root, k);
 	}
-		
+	
+	
+	
+	
+	
+	
 	/* function to print key-value pairs in the tree in ascending order */
 	public static void printBT (Node r)
 	{
@@ -384,8 +396,11 @@ public class BinarySearchTree
 		printBT (ob1.root);
 		System.out.println();
 		
-		ob1.delete(11);
-		printBT (ob1.root);
-		System.out.println();
+		
+		
+		
 	}
+	
+	
+	
 }
