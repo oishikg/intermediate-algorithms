@@ -252,7 +252,6 @@ public class BinarySearchTree
 			printBT (r.right);
 		}
 	}
-	
 	/* main function to run tests */
 	public static void main (String[] args)
 	{
