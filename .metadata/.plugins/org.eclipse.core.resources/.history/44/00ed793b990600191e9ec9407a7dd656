@@ -1,0 +1,386 @@
+package searching;
+import searching.Node;
+
+public class BinarySearchTree 
+{
+	/* instance variables: the BST implementation requires only a 
+	 * reference to the root */
+	Node root;
+	
+	/* instance methods */
+		
+	/* function to insert a new key-value pair
+	 */
+	private Node putHelper (Node r, int k, String v)
+	{
+		/* base case */
+		if (r == null)
+			return (new Node (k, v, null, null));
+		/* traverse right sub-tree */
+		else if (r.key < k)
+		{
+			r.right = putHelper (r.right, k, v);
+			return (r);
+		}
+		/* traverse left sub-tree */
+		else if (r.key > k)
+		{
+			r.left = putHelper (r.left, k, v);
+			return (r);
+		}
+			
+		/* in case of equality, update value */
+		else
+		{
+			r.value = v;
+			return (r);
+		}
+	}
+	
+	public void put (int k, String v)
+	{
+		this.root = putHelper (this.root, k, v);
+	}
+	
+	
+	/* function to retrieve a value given a key */
+	private String getHelper (Node r, int k)
+	{
+		/* base case */
+		if (r == null)
+			return null;
+		/* traverse right subtree */
+		else if (k > r.key)
+			return (getHelper (r.right, k));
+		/* traverse left subtree */
+		else if (k < r.key)
+			return (getHelper (r.left, k));
+		/* in case of equality, we have retrieved the key; return string */
+		else
+			return (r.value);
+	}	
+	
+	public String get (int k)
+	{
+		return (getHelper (this.root, k));
+	}
+	
+	
+	/* function to retrieve minimum value in a tree; note
+	 * that this implementation assumes that there are 
+	 * already values in the binary tree; also note that
+	 * the helper function returns the left most node
+	 * (rather than the left most key) to support the
+	 * general deletion function (see below) */
+	private Node minHelper (Node r)
+	{
+		/* base case: we reach the minimum key when there
+		 * are no more left sub-trees available 
+		 */
+		if (r.left == null)
+			return (r);
+		else
+			return (minHelper (r.left));
+	}
+	
+	public int min ()
+	{
+		return (minHelper (this.root).key);
+	}
+	
+	/* function to retrieve the maximum value in a tree */
+	private int maxHelper (Node r)
+	{
+		/* base case: we reach the minimum key when there
+		 * are no more left sub-trees available 
+		 */
+		if (r.right == null)
+			return (r.key);
+		else
+			return (maxHelper (r.right));
+	}
+	
+	public int max ()
+	{
+		return (maxHelper (this.root));
+	}
+	
+	/* function to return size of a tree, i.e., the number
+	 * of nodes 
+	 */
+	private int sizeHelper (Node r)
+	{
+		if (r == null)
+			return 0;
+		else
+			return (sizeHelper (r.left) + sizeHelper (r.right)+ 1);
+	}
+	
+	public int size ()
+	{
+		return (sizeHelper (this.root));
+	}
+	
+	/* function to delete minimum node */
+	private Node deleteMinHelper (Node r)
+	{
+		/* base case: if the left sub-tree of the present
+		 * node is null, we have reached the node with the
+		 * minimum key; to delete it, we simply make the 
+		 * right sub-tree of the current node the left
+		 * sub-tree of its parent */
+		if (r.left == null)
+		{
+			return (r.right);
+		}
+		/* keep traversing down the left sub-trees */
+		else
+		{
+			r.left = deleteMinHelper (r.left);
+			return (r);
+		}
+	}
+	
+	public void deleteMin ()
+	{
+		this.root = deleteMinHelper (this.root);
+	}
+	
+	/* function to delete maximum node */
+	private Node deleteMaxHelper (Node r)
+	{
+		/* base case: if the left sub-tree of the present
+		 * node is null, we have reached the node with the
+		 * minimum key; to delete it, we simply make the 
+		 * right sub-tree of the current node the left
+		 * sub-tree of its parent */
+		if (r.right == null)
+		{
+			return (r.left);
+		}
+		/* keep traversing down the left sub-trees */
+		else
+		{
+			r.right= deleteMaxHelper (r.right);
+			return (r);
+		}
+	}
+	
+	public void deleteMax()
+	{
+		this.root = deleteMaxHelper (this.root);
+	}
+	
+	
+	/* function to delete any node */
+	private Node deleteHelper (Node r, int k)
+	{
+		/* in case the key does not exist in the BST */
+		if (r == null)
+			return r;
+		/* search right sub-tree */
+		else if (r.key < k)
+		{
+			r.right = deleteHelper (r.right, k);
+			return r;
+		}
+		/* search the left sub-tree */
+		else if (r.key > k)
+		{
+			r.left = deleteHelper (r.left, k);
+			return r;
+		}
+		/* when the key is found */
+		else
+		{
+			/* make a temp copy of the node r; we will modify 
+			 * r using temp's reference to the original 
+			 * structure of r; note that our original approach
+			 * of initializing a successor node and then 
+			 * building up while referring to r fails because
+			 * when we set successor.left = r.left, the original 
+			 * sub-tree rooted at r also gets modified, since 
+			 * both successor and temp refer to the same copy
+			 * of the sub-tree! Owing to this reason, we end up
+			 * with a cyclical structure which gave rise to the
+			 * infinite loop when we attempted to print the tree */
+			System.out.println("Debugging now");
+			Node temp = r;
+			/* set r to point to its successor */
+			r = minHelper (temp.right);
+			printBT (r);
+			System.out.println();
+			/* set the left sub-tree to temp's left sub-tree */
+			r.left = temp.left;
+			/* delete the minimal node in temp's right sub-tree,
+			 * which r references now; set r's right sub-tree to
+			 * this modified sub-tree
+			 */
+			r.right = deleteMinHelper(temp.right);
+			return r;
+		}
+
+		
+	}
+	
+	public void delete (int k)
+	{
+		/* first, check if k is the maximal or the minimal element;
+		 * this is required to avoid null pointer errors in the 
+		 * helper function */
+		if (k == min())
+			deleteMin();
+		else if (k == max ())
+			deleteMax();
+		else
+			this.root = deleteHelper (this.root, k);
+	}
+	
+	
+	
+	
+	
+	
+	/* function to print key-value pairs in the tree in ascending order */
+	public static void printBT (Node r)
+	{
+		if (r == null)
+			return;
+		else
+		{
+			printBT (r.left);
+			System.out.print("(" + r.key + " , " + r.value + ")");
+			printBT (r.right);
+		}
+	}
+	/* main function to run tests */
+	public static void main (String[] args)
+	{
+		/* test arrays */
+		int[] testKeys = {1, 35, 16, 16, 18, 19, 2, 45, 18, 19, 23, 24, 89, 78, 69, 91};
+		String[] testValues = {"Miles", "Chet", "Dave", "Oscar", "Bill", "Art", "Martha", "Valentina", "Katya", "Daniel", "Evgeny", "Arthur", "Ivo", "Anne", "Hillary", "Jacqueline"};
+		
+		/* test BTs; applying the print function to these
+		 * test values confirms that our print function
+		 * works  */
+		Node testBT1 = new Node (3, "O", null, null);
+		printBT (testBT1);
+		System.out.println();
+		
+		Node testBT2 = 
+				new Node (8, "A", 
+						new Node (5, "C", null, null), 
+						new Node (12, "D", null, null)
+						); 
+		printBT (testBT2);
+		System.out.println();
+		
+		Node testBT3 = 
+				new Node (8, "A", 
+						new Node (5, "C", 
+								null, 
+								new Node (7, "K", null, null)), 
+						new Node (12, "D", 
+								new Node (11, "P", null, null), 
+								null)
+						);
+		printBT (testBT3);
+		System.out.println();
+		
+		/* create object to run tests */
+		BinarySearchTree ob =  new BinarySearchTree ();
+		
+		/* test put() */
+		ob.put(testKeys[2], testValues[2]);
+		ob.put(testKeys[1], testValues[1]);
+		ob.put(testKeys[0], testValues[0]);
+		printBT (ob.root);
+		System.out.println();
+		
+		ob.put(testKeys[3], testValues[3]);
+		ob.put(testKeys[4], testValues[4]);
+		ob.put(testKeys[5], testValues[5]);
+		ob.put(17, "Horowitz");
+		printBT (ob.root);
+		System.out.println();
+		
+		
+		/* test get () */
+		assert (ob.get (16) == "Oscar");
+		assert (ob.get(1) == "Miles");
+		assert (ob.get(35) == "Chet");
+		assert (ob.get(14) == null);
+		
+		/* test min () */
+		assert (ob.min() == 1);
+		
+		BinarySearchTree ob1 = new BinarySearchTree ();
+		ob1.root = testBT3;
+		assert (ob1.min() == 5);
+		
+		BinarySearchTree ob2 = new BinarySearchTree ();
+		ob2.root = testBT2;
+		assert (ob2.min() == 5);
+		
+		/* test max () */
+		assert (ob.max() == 35);
+		assert (ob1.max() == 12);
+		assert (ob2.max() == 12);
+		
+		/* test size () */
+		assert (ob.size() == 6);
+		assert (ob1.size() == 5);
+		assert (ob2.size() == 3);
+		
+		/* test deleteMin () */
+		/*
+		ob.deleteMin();
+		printBT (ob.root);
+		System.out.println();
+		
+		ob.deleteMin();
+		printBT (ob.root);
+		System.out.println();
+		
+		ob1.deleteMin();
+		printBT (ob1.root);
+		System.out.println(); */
+		
+		/* test deleteMax () */
+		/*ob.deleteMax();
+		printBT (ob.root);
+		System.out.println();
+		
+		ob.deleteMax();
+		printBT (ob.root);
+		System.out.println();
+		
+		ob1.deleteMax();
+		printBT (ob1.root);
+		System.out.println(); */
+		
+		/* test delete () */
+		/*ob.delete(1);
+		printBT (ob.root);
+		System.out.println();
+		
+		ob.delete(22);
+		printBT (ob.root);
+		System.out.println(); */
+		
+		ob.delete(18);
+		//printBT (ob.root);
+		System.out.println(); 
+		
+		//ob1.delete(8);
+		//printBT (ob1.root);
+		//System.out.println();
+		//printBT (ob1.root);
+		
+		
+		
+	}
+	
+	
+	
+}
